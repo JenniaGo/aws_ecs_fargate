@@ -1,3 +1,5 @@
+# Usage: pytest Search_movie_test.py
+
 import unittest
 from flask import Flask, jsonify, request
 
