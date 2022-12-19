@@ -1,0 +1,78 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  EcsClusterName:
+    Type: String
+  TaskDefinitionName:
+    Type: String
+  TaskCount:
+    Type: Number
+    Default: 1
+  ContainerPort:
+    Type: Number
+    Default: 80
+  ContainerImage:
+    Type: String
+  ContainerName:
+    Type: String
+  ContainerMemory:
+    Type: Number
+    Default: 512
+  ContainerCpu:
+    Type: Number
+    Default: 256
+  TaskCommand:
+    Type: String
+    Default: 'echo "Hello, world!"'
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  SecurityGroupIds:
+    Type: List<AWS::EC2::SecurityGroup::Id>
+  AwsRegion:
+    Type: String
+    Default: us-east-1
+  AwsAccountId:
+    Type: String
+
+Resources:
+  EcsCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Ref EcsClusterName
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Ref TaskDefinitionName
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      CPU: !Ref ContainerCpu
+      Memory: !Ref ContainerMemory
+      ContainerDefinitions:
+        - Name: !Ref ContainerName
+          Image: !Ref ContainerImage
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+              HostPort: !Ref ContainerPort
+          Essential: true
+          Command:
+            - !Ref TaskCommand
+
+  EcsService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref TaskDefinitionName
+      Cluster: !Ref EcsCluster
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: !Ref TaskCount
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          SecurityGroups: !Ref SecurityGroupIds
+          Subnets: !Ref SubnetIds
+
+Outputs:
+  LoadBalancerUrl:
+    Value: !GetAtt EcsService.LoadBalancer.Ingress[0].Hostname
