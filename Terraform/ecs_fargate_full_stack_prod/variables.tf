@@ -35,6 +35,11 @@ variable "container_cpu" {
   default = 256
 }
 
+variable "task_command" {
+  type = string
+  default = "echo 'Hello, world!'"
+}
+
 variable "subnet_ids" {
   type = list(string)
 }
