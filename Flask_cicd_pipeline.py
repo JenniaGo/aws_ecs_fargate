@@ -3,7 +3,7 @@ import subprocess
 
 def build_docker_image():
   # Clone Git repository
-  subprocess.run(["git", "clone", "https://github.com/user/my-flask-app.git"])
+  subprocess.run(["git", "clone", "https://github.com/JenniaGo/Movie_Posters_Webapp.git"])
 
   # Build Docker image
   subprocess.run(["docker", "build", "-t", "my-flask-app", "."])
