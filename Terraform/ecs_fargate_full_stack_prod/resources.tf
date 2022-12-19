@@ -22,7 +22,8 @@ resource "aws_ecs_task_definition" "task_definition" {
           "hostPort": "${var.container_port}"
         }
       ],
-      "essential": true
+      "essential": true,
+      "command": ["${var.task_command}"]
     }
   ]
   DEFINITION
