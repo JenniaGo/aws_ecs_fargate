@@ -1,6 +1,6 @@
-# Usage: python test_movie_search.py --query <query>
+# Usage: python Search_movies_arguments_test.py --query <query>
 # replace <query> to your movie you want to search
-# example: python test_movie_search.py --query superman
+# example: python Search_movies_arguments_test.py --query superman
 
 
 import unittest
